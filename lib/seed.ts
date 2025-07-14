@@ -1,39 +1,47 @@
 import 'dotenv/config';
 import db from './db';
-//import { users, posts } from './schema';
+import { users, posts } from './schema';
 
 async function main() {
   console.log('Starting database seed...');
 
   try {
-    // Example seed data - modify according to your needs
-    //console.log('Seeding users...');
-    //   await db.insert(users).values([
-    //     {
-    //       name: 'John Doe',
-    //       email: 'john@example.com',
-    //     },
-    //     {
-    //       name: 'Jane Smith',
-    //       email: 'jane@example.com',
-    //     },
-    //   ]);
+    // Clear existing data
+    await db.delete(posts);
+    await db.delete(users);
 
-    //   console.log('Seeding posts...');
-    //   await db.insert(posts).values([
-    //     {
-    //       title: 'Getting Started with Drizzle',
-    //       content: 'This is a post about getting started with Drizzle ORM.',
-    //       published: true,
-    //       authorId: 1,
-    //     },
-    //     {
-    //       title: 'Migrating from Prisma to Drizzle',
-    //       content: 'A guide on migrating from Prisma to Drizzle.',
-    //       published: false,
-    //       authorId: 2,
-    //     },
-    //   ]);
+    console.log('Seeding users...');
+    const insertedUsers = await db.insert(users).values([
+      {
+        name: 'Alice',
+        email: 'alice@example.com',
+        username: 'alice',
+        imageUrl: 'https://i.pravatar.cc/150?u=alice',
+      },
+      {
+        name: 'Bob',
+        email: 'bob@example.com',
+        username: 'bob',
+        imageUrl: 'https://i.pravatar.cc/150?u=bob',
+      },
+    ]).returning();
+
+    console.log('Seeding posts...');
+    await db.insert(posts).values([
+      {
+        content: 'Just setting up my new social media feed!',
+        authorId: insertedUsers[0].id,
+      },
+      {
+        content: 'Loving the design of this new app. #webdev',
+        imageUrl: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop',
+        authorId: insertedUsers[1].id,
+      },
+      {
+        content: 'Drizzle ORM is pretty cool for working with databases in TypeScript.',
+        authorId: insertedUsers[0].id,
+      },
+    ]);
 
     console.log('Database seed completed successfully!');
   } catch (error) {
@@ -49,4 +57,5 @@ main()
   })
   .finally(async () => {
     process.exit(0);
-  }); 
+  });
+
