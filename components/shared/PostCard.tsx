@@ -2,6 +2,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Heart, Share2, Bookmark } from "lucide-react";
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow'
+
 
 type PostCardProps = {
   post: {

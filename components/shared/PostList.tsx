@@ -10,6 +10,7 @@ export default async function PostList() {
       id: posts.id,
       content: posts.content,
       imageUrl: posts.imageUrl,
+      createdAt: posts.createdAt,
       author: {
         name: users.name,
         username: users.username,
@@ -28,4 +29,5 @@ export default async function PostList() {
     </div>
   );
 }
+
 
